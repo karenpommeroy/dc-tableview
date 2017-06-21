@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>dc.tableview - working with bootstrap</title>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="examples.css">
+	<link rel="stylesheet" type="text/css" href="../build/dc-tableview.css">
+</head>
+<body>
+	<div id="test"></div>
+
+<script type="text/javascript" src="../node_modules/d3/d3.js"></script>
+<script type="text/javascript" src="../node_modules/crossfilter2/crossfilter.js"></script>
+<script type="text/javascript" src="../node_modules/dc/dc.js"></script>
+<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="../build/dc-tableview.js"></script>
+<script type="text/javascript">
+var ndx;
+d3.csv("examples.csv", function(error, experiments) {
+    ndx = crossfilter(experiments);
+    var fmt = d3.format('02d');
+    var runDimension = ndx.dimension(function(d) {return [fmt(+d.Expt),fmt(+d.Run)];}),
+        grouping = function (d) { return d.Expt;};
+
+    var chart = dc.tableview("#test", "group1");
+    chart
+        .dataSource(experiments)
+        .width(725)
+        .height(480)
+        .dimension(runDimension)
+        .group({})
+        .columns([
+            { title: "Experiment", data: "Expt" },
+            { title: "Run", data: "Run" },
+            { title: "Speed", data: "Speed" },
+        ])
+        .enableColumnReordering(true)
+        .enablePagingSizeChange(true)
+        .enableSearch(true)
+        .rowId("Expt")
+        .showGroups(true)
+        .groupBy("Expt")
+        .fixedHeader(true)
+		.buttons(["pdf", "csv", "excel", "print"])
+        .sortBy([["Expt", "desc"]])
+        .listeners({
+            rowClicked: function (row, data, index) {
+            },
+            rowDblClicked: function (row, data, index) {
+            },
+            rowEnter: function (row, data, index) {
+            },
+            rowLeave: function (row, data, index) {
+            }
+        });
+
+    chart.render();
+  });
+</script>
+</body>
+</html>

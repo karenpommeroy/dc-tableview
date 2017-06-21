@@ -1,0 +1,13 @@
+html, body {
+	padding: 25px;
+}
+
+.dataTables_wrapper :not(.dt-bootstrap) .paging-info {
+	margin: 0px 25px;
+    float: left;
+}
+
+.dataTables_wrapper :not(.dt-bootstrap) .paging-length {
+	margin: 12px 10px;
+    float: left;
+}
