@@ -6,11 +6,16 @@ It is build on top of well known **[DataTables](https://github.com/DataTables/Di
 
 ## Table of contents
 
+- [Screenshots](#screenshots)
 - [Quick start](#quick-start)
 - [Usage](#usage)
 - [Methods](#methods)
 - [Examples](#examples)
 - [Copyright and license](#copyright-and-license)
+
+## Screenshots
+
+![Table styled with Bootstap](https://github.com/karenpommeroy/dc-tableview/tree/master/assets/screen_1.png)
 
 ## Quick start
 Several quick start options are available:
