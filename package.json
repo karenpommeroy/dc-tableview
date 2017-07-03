@@ -1,6 +1,6 @@
 {
   "name": "dc-tableview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Feature rich, interactive table component (chart) for dc.js library",
   "main": "src/main.js",
   "keywords": [
