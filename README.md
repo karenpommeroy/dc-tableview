@@ -15,7 +15,7 @@ It is build on top of well known **[DataTables](https://github.com/DataTables/Di
 
 ## Screenshots
 
-![Table styled with Bootstap](https://github.com/karenpommeroy/dc-tableview/tree/master/assets/screen_1.png)
+![Bootstrap styled version](https://rawgit.com/karenpommeroy/dc-tableview/master/assets/screen_1.png)
 
 ## Quick start
 Several quick start options are available:
