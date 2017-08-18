@@ -2,6 +2,20 @@ html, body {
 	padding: 25px;
 }
 
+#output {
+    font-size: 16px;
+    color: #1d9800;
+    margin-bottom: 25px;
+    text-align: center;
+    height: 25px;
+}
+
+#container1 {
+    width: 80%;
+    margin: auto;
+    float: none;
+}
+
 .dataTables_wrapper :not(.dt-bootstrap) .paging-info {
 	margin: 0px 25px;
     float: left;

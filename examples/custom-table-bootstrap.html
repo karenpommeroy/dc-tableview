@@ -3,18 +3,21 @@
 <head>
     <title>dc.tableview - working with bootstrap</title>
     <meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="examples.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.css">
 	<link rel="stylesheet" type="text/css" href="../build/dc-tableview-bs.css">
+    <link rel="stylesheet" type="text/css" href="examples.css">
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.1/crossfilter.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 </head>
 <body>
-	<div id="test"></div>
+    <div id="output"></div>
+	<div id="container1"></div>
 
-<script type="text/javascript" src="../node_modules/d3/d3.js"></script>
-<script type="text/javascript" src="../node_modules/crossfilter2/crossfilter.js"></script>
-<script type="text/javascript" src="../node_modules/dc/dc.js"></script>
-<script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
-<script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="../build/dc-tableview-bs.js"></script>
 <script type="text/javascript">
 var ndx;
@@ -24,11 +27,9 @@ d3.csv("examples.csv", function(error, experiments) {
     var runDimension = ndx.dimension(function(d) {return [fmt(+d.Expt),fmt(+d.Run)];}),
         grouping = function (d) { return d.Expt;};
 
-    var chart = dc.tableview("#test", "group1");
+    var chart = dc.tableview("#container1", "group1");
     chart
         .dataSource(experiments)
-        .width(725)
-        .height(480)
         .dimension(runDimension)
         .group({})
         .columns([
@@ -47,12 +48,18 @@ d3.csv("examples.csv", function(error, experiments) {
         .sortBy([["Expt", "desc"]])
         .listeners({
             rowClicked: function (row, data, index) {
+                var output = document.querySelector("#output");
+                output.innerHTML = "<b>Row " + index + " clicked:</b> " + JSON.stringify(data);
             },
             rowDblClicked: function (row, data, index) {
+                var output = document.querySelector("#output");
+                output.innerHTML = "<b>Row " + index + " double clicked:</b> " + JSON.stringify(data);
             },
             rowEnter: function (row, data, index) {
+                row.style.backgroundColor = "#eff9ff";
             },
             rowLeave: function (row, data, index) {
+                row.style.backgroundColor = "";
             }
         });
 
