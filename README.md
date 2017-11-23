@@ -133,7 +133,9 @@ chart.columns([
 ```
 
 ##### object dataSource(object source)
-Get or set dataSource to be be used for the table. See details here: https://datatables.net/manual/data/#Data-sources
+Get or set dataSource to be be used for the table.
+By default dataSource is obtained based on dimension however you can supply your own data independently.
+See details here: https://datatables.net/manual/data/#Data-sources
 ```javascript
 chart.dataSource({});
 ```
@@ -287,7 +289,7 @@ chart.enableHeader(false)
 Click one of the links below to see dc-tableview in action:
 
 * [Customized table with default styling](https://rawgit.com/karenpommeroy/dc-tableview/master/examples/custom-table-default.html)
-* [Customized table working with bootstrap](https://rawgit.com/karenpommeroy/dc-tableview/master/examples/custom-table-bootstrap.html)
+* [Table styled with bootstrap working with other charts](https://rawgit.com/karenpommeroy/dc-tableview/master/examples/custom-table-bootstrap.html)
 
 All of above examples are available in the examples folder located in the repository.
 
