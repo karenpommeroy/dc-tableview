@@ -1,5 +1,5 @@
 html, body {
-	padding: 25px;
+	padding: 20px;
 }
 
 #output {
@@ -10,10 +10,27 @@ html, body {
     height: 25px;
 }
 
+.chart-container {
+    display: inline-block;
+}
+
+#container0 {
+    width: 100%;
+}
+
 #container1 {
-    width: 80%;
+    width: 60%;
     margin: auto;
-    float: none;
+}
+
+#container2 {
+    width: 30%;
+    margin: auto;
+}
+
+#container3 {
+    width: 30%;
+    margin: auto;
 }
 
 .dataTables_wrapper :not(.dt-bootstrap) .paging-info {

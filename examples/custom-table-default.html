@@ -8,8 +8,8 @@
     <link rel="stylesheet" type="text/css" href="examples.css">
 </head>
 <body>
-    <div id="output"></div>
-	<div id="container1"></div>
+  <div id="output"></div>
+	<div id="container0" class="chart-container"></div>
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.1/crossfilter.js"></script>
@@ -24,7 +24,7 @@ d3.csv("examples.csv", function(error, experiments) {
     var runDimension = ndx.dimension(function(d) {return [fmt(+d.Expt),fmt(+d.Run)];}),
         grouping = function (d) { return d.Expt;};
 
-    var chart = dc.tableview("#container1", "group1");
+    var chart = dc.tableview("#container0", "group1");
     chart
         .dataSource(experiments)
         .dimension(runDimension)

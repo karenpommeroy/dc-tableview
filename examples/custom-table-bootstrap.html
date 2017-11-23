@@ -15,23 +15,29 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 </head>
 <body>
-    <div id="output"></div>
-	<div id="container1"></div>
-
+  <div id="output"></div>
+	<div id="container1" class="chart-container"></div>
+  <div id="container2" class="chart-container"></div>
+  <div id="container3" class="chart-container"></div>
 <script type="text/javascript" src="../build/dc-tableview-bs.js"></script>
 <script type="text/javascript">
 var ndx;
 d3.csv("examples.csv", function(error, experiments) {
     ndx = crossfilter(experiments);
     var fmt = d3.format('02d');
-    var runDimension = ndx.dimension(function(d) {return [fmt(+d.Expt),fmt(+d.Run)];}),
-        grouping = function (d) { return d.Expt;};
+    var runDimension = ndx.dimension(function(d) {return fmt(+d.Expt);}),
+        group = runDimension.group();
+        
+    var runDimension2 = ndx.dimension(function(d) {return fmt(+d.Expt);}),
+        group2 = runDimension2.group();
 
-    var chart = dc.tableview("#container1", "group1");
-    chart
-        .dataSource(experiments)
+    var chart1 = dc.tableview("#container1", "group1");
+    var chart2 = dc.rowChart("#container2", "group1");
+    var chart3 = dc.pieChart("#container3", "group1");
+    
+    chart1
         .dimension(runDimension)
-        .group({})
+        .group(group)
         .columns([
             { title: "Experiment", data: "Expt" },
             { title: "Run", data: "Run" },
@@ -44,7 +50,7 @@ d3.csv("examples.csv", function(error, experiments) {
         .showGroups(true)
         .groupBy("Expt")
         .fixedHeader(true)
-		.buttons(["pdf", "csv", "excel", "print"])
+        .buttons(["pdf", "csv", "excel", "print"])
         .sortBy([["Expt", "desc"]])
         .listeners({
             rowClicked: function (row, data, index) {
@@ -63,7 +69,15 @@ d3.csv("examples.csv", function(error, experiments) {
             }
         });
 
-    chart.render();
+    chart2.dimension(runDimension)
+    .group(group);
+        
+    chart3.dimension(runDimension2)
+    .group(group2);
+
+    chart1.render();
+    chart2.render();
+    chart3.render();
   });
 </script>
 </body>
