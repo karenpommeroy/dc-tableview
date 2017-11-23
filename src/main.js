@@ -134,7 +134,7 @@ dc.tableview = function (parent, chartGroup) {
     };
 
     _chart.clean = function () {
-        _chart.select().selectAll("*").remove();
+        _chart.root().selectAll("*").remove();
     };
     
     _chart.getOrderSettings = function() {
