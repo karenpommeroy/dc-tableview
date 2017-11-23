@@ -90,7 +90,7 @@ dc.tableview = function (parent, chartGroup) {
 
     _chart.getTableOptions = function () {
         return {
-            data: _dataSource,
+            data: this.dimension().top(Infinity),
             columns: _columns,
             header: _enableHeader,
             autoWidth: _enableAutoWidth,
