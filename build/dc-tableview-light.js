@@ -16511,7 +16511,7 @@ dc.tableview = function (parent, chartGroup) {
 
     _chart.getTableOptions = function () {
         return {
-            data: _dataSource,
+            data: this.dimension().top(Infinity),
             columns: _columns,
             header: _enableHeader,
             autoWidth: _enableAutoWidth,
@@ -16555,7 +16555,7 @@ dc.tableview = function (parent, chartGroup) {
     };
 
     _chart.clean = function () {
-        _chart.select().selectAll("*").remove();
+        _chart.root().selectAll("*").remove();
     };
     
     _chart.getOrderSettings = function() {
