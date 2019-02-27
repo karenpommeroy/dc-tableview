@@ -1,6 +1,6 @@
 # dc-tableview
-`dc-tableview` is a feature rich, interactive chart for dc that presents data in tableview form.
-It was created because of poor functionality of original table which it can easily replace.
+`dc-tableview` is an interactive chart for dc.js library that presents data in tableview form.
+It was created because I was missing some functionality in the original table that comes with dc. I designed it so that it can easily replace dc.dataTable in your projects.
 It is build on top of well known **[DataTables](https://github.com/DataTables/Dist-DataTables)** jQuery plugin
 
 
