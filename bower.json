@@ -1,6 +1,6 @@
 {
   "name": "dc-tableview",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Feature rich, interactive table component (chart) for dc.js library",
   "main": [
     "src/main.js"
@@ -57,6 +57,6 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
 	"dc": "^2.1.6",
-	"jquery": "^2.2.4"
+	"jquery": "^3.4.0"
   }
 }
