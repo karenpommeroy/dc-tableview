@@ -1,40 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <title>dc.tableview - working with bootstrap</title>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/dc/dc.css">
 	<link rel="stylesheet" type="text/css" href="../build/dc-tableview-bs.css">
-    <link rel="stylesheet" type="text/css" href="examples.css">
-    
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter2/1.4.1/crossfilter.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.8/dc.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+	<link rel="stylesheet" type="text/css" href="../node_modules/font-awesome/css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="./examples.css">
+
+    <script type="text/javascript" src="../node_modules/d3/dist/d3.js"></script>
+    <script type="text/javascript" src="../node_modules/crossfilter2/crossfilter.js"></script>
+    <script type="text/javascript" src="../node_modules/dc/dc.js"></script>
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
 </head>
+
 <body>
-  <div id="output"></div>
-	<div id="container1" class="chart-container"></div>
-  <div id="container2" class="chart-container"></div>
-  <div id="container3" class="chart-container"></div>
+    <div id="alerts"></div>
+    <div class="row no-gutters">
+        <div class="col-md-8">
+            <div id="container1" class="chart-container"></div>
+            <div class="container-fluid">
+                <div id="table-settings" class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary">Settings</button>
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a id="use-paging" class="dropdown-item" href="#">Use paging</a>
+                        <a id="use-scrolling" class="dropdown-item" href="#">Use scrolling</a>
+                    </div>
+                    </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                                <h5 class="card-title">Bar Chart</h5>
+                            <div id="container2" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Pie Chart</h5>
+                            <div id="container3" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <script type="text/javascript" src="../build/dc-tableview-bs.js"></script>
 <script type="text/javascript">
 var ndx;
-d3.csv("examples.csv", function(error, experiments) {
+d3.csv("./examples.csv").then((experiments) => {
     ndx = crossfilter(experiments);
     var fmt = d3.format('02d');
     var runDimension = ndx.dimension(function(d) {return fmt(+d.Expt);}),
         group = runDimension.group();
-        
+
     var runDimension2 = ndx.dimension(function(d) {return fmt(+d.Expt);}),
         group2 = runDimension2.group();
 
+    var runDimension3 = ndx.dimension(function(d) {return +d.Run;});
+    var speedSumGroup = runDimension3.group().reduceSum(function(d) {return d.Speed * d.Run / 1000;});
+
     var chart1 = dc.tableview("#container1", "group1");
-    var chart2 = dc.rowChart("#container2", "group1");
+    var chart2 = dc.barChart("#container2", "group1");
     var chart3 = dc.pieChart("#container3", "group1");
-    
+
     chart1
         .dimension(runDimension)
         .group(group)
@@ -44,22 +87,31 @@ d3.csv("examples.csv", function(error, experiments) {
             { title: "Speed", data: "Speed" },
         ])
         .enableColumnReordering(true)
+        .enablePaging(true)
         .enablePagingSizeChange(true)
         .enableSearch(true)
+        .enableScrolling(false)
+        .scrollingOptions({
+            scrollY: "31rem",
+            scrollCollapse: true,
+            deferRender: true,
+        })
         .rowId("Expt")
-        .showGroups(true)
-        .groupBy("Expt")
-        .fixedHeader(true)
+        // .showGroups(true)
+        // .groupBy("Expt")
+        .responsive(true)
+        .select(false)
+        .fixedHeader(false)
         .buttons(["pdf", "csv", "excel", "print"])
         .sortBy([["Expt", "desc"]])
         .listeners({
             rowClicked: function (row, data, index) {
-                var output = document.querySelector("#output");
-                output.innerHTML = "<b>Row " + index + " clicked:</b> " + JSON.stringify(data);
+                var output = document.querySelector("#alerts");
+                output.innerHTML = createAlert(`Click on row ${index}!`, JSON.stringify(data));
             },
             rowDblClicked: function (row, data, index) {
-                var output = document.querySelector("#output");
-                output.innerHTML = "<b>Row " + index + " double clicked:</b> " + JSON.stringify(data);
+                var output = document.querySelector("#alerts");
+                output.innerHTML = createAlert(`Double click on row ${index}!`, JSON.stringify(data));
             },
             rowEnter: function (row, data, index) {
                 row.style.backgroundColor = "#eff9ff";
@@ -69,16 +121,40 @@ d3.csv("examples.csv", function(error, experiments) {
             }
         });
 
-    chart2.dimension(runDimension)
-    .group(group);
-        
+    chart2.dimension(runDimension3)
+    .group(speedSumGroup)
+    .x(d3.scaleLinear().domain([6,20]));
+
     chart3.dimension(runDimension2)
     .group(group2);
 
     chart1.render();
     chart2.render();
     chart3.render();
-  });
+
+    $("#table-settings #use-paging").on("click", (event, data) => {
+        chart1.enableScrolling(false);
+        chart1.fixedHeader(true);
+    });
+
+    $("#table-settings #use-scrolling").on("click", (event, data) => {
+        chart1.fixedHeader(false);
+        chart1.enablePaging(true);
+        chart1.enableScrolling(true);
+    });
+});
+
+const createAlert = (title, text, timeout = 3000) => {
+    setTimeout(() => document.querySelector("#alerts .alert").classList.replace("show", "hide"), timeout);
+
+    return `<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <h6 class="alert-heading">${title}</h6> ${text}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>`;
+};
+
 </script>
 </body>
 </html>

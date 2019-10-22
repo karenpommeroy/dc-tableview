@@ -2,43 +2,50 @@ html, body {
 	padding: 20px;
 }
 
-#output {
-    font-size: 16px;
-    color: #1d9800;
-    margin-bottom: 25px;
-    text-align: center;
-    height: 25px;
+#alerts {
+    width: auto;
+    position: fixed;
+    z-index: 10;
+    top: 0.5em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: .9em;
 }
 
-.chart-container {
-    display: inline-block;
+#alerts .alert {
+    padding: .8em 2.5em .8em 1em;
+}
+#alerts .alert .close {
+    padding: 0.25rem .5rem;
+}
+
+.card {
+    margin: 0 auto 1em auto;
+}
+
+.dc-table-header {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
 }
 
 #container0 {
     width: 100%;
 }
 
-#container1 {
-    width: 60%;
-    margin: auto;
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
 }
 
-#container2 {
-    width: 30%;
-    margin: auto;
+.page-item .page-link {
+    color: #6c757d;;
+    border-color: #6c757d;
 }
 
-#container3 {
-    width: 30%;
-    margin: auto;
-}
-
-.dataTables_wrapper :not(.dt-bootstrap) .paging-info {
-	margin: 0px 25px;
-    float: left;
-}
-
-.dataTables_wrapper :not(.dt-bootstrap) .paging-length {
-	margin: 12px 10px;
-    float: left;
+.page-item.disabled .page-link {
+    color: #6c757d;
+    border-color: #6c757d;
 }

@@ -1,15 +1,13 @@
-"use strict";
-
 /**
  * Feature rich, interactive chart for dc that presents data in tableview form.
- * It was created because of poor functionality of original table which it can easily replace 
- * Depends on datatables (with plugins), bootstrap and jquery libaries
+ * It was created because of poor functionality of original table which it can easily replace
+* Depends on datatables (with plugins), bootstrap and jquery libaries
  *
  * Note: Unlike other charts, the dc.tableview uses the {@link dc.dataTable#group group} attribute as a
  * keying function for {@link https://github.com/d3/d3-3.x-api-reference/blob/master/Arrays.md#nest nesting} the data
  * together in groups.  Do not pass in a crossfilter group as this will not work.
- *
- * It is based on datatables.js library
+*
+* It is based on datatables.js library
  *
  * @dc.tableview
  * @memberof dc
@@ -26,44 +24,52 @@ dc.tableview = function (parent, chartGroup) {
     var TABLE_CLASS = "dc-table table table-bordered";
     var TABLE_HEADER_CLASS = "dc-table-header";
     var TABLE_ROW_CLASS = "dc-table-row";
-    var PAGINATION_CLASS = "pagination-sm";
+    var PAGINATION_CLASS = "pagination";
+    var PAGINATION_BTN_CLASS = "page-link";
     var PAGINATION_INFO_TEXT = "Showing _START_ - _END_ of _TOTAL_ items";
-    
+
     var _size = Infinity;
     var _columns = [];
-    var _sortBy = []
-    var _order = d3.ascending;
+    var _sortBy = [];
+    var _order;
     var _beginSlice = 0;
     var _endSlice;
     var _showGroups = false;
     var _dataSource = [];
     var _buttons = [];
     var _groupBy = [];
-	var _fixedHeader = true;
+    var _fixedHeader = true;
     var _enableSearch = false;
     var _enablePaging = true;
+    var _enableScrolling = false;
+    var _scrollingOptions = {
+        scrollY: 200,
+        scrollCollapse: true,
+        deferRender: false,
+    };
     var _enablePagingSizeChange = false;
     var _enablePagingInfo = true;
     var _enableColumnReordering = false;
     var _enableHeader = true;
     var _enableAutoWidth = true;
     var _pagingInfoText = PAGINATION_INFO_TEXT;
-	var _lengthMenuContent;
+    var _lengthMenuContent;
     var _listeners = {};
     var _rowId;
-    var _scrollY;
-	var _dom = "<'row'<'col-sm-6 col-md-4'B><'col-sm-6 col-md-8'f>>t<'row'<'paging-info pull-left'i><'paging-length pull-left'l><'col-sm-6 pull-right'p>>";
-    
+    var _select;
+    var _responsive = true;
+    var _dom = "<'container-fluid'<'row'<'col-sm-6 col-md-4'B><'col-sm-6 col-md-8'f>>t<'row',<'col-sm-6 float-left'<'paging-info'i><'paging-length'l>><'col-sm-6 float-right'p>>>";
+
     var _parentEl = _getParentElement(parent);
 
     function _isDOMElement (target) {
         return target instanceof Element;
     }
-		
+
     function _isString (target) {
         return typeof target === "string";
     }
-    
+
     function _getParentElement (target) {
         var element;
         if (_isDOMElement(target)) {
@@ -72,21 +78,33 @@ dc.tableview = function (parent, chartGroup) {
         else if (_isString(target)) {
             element = document.querySelector(target);
         }
-        
-        return element; 
+
+        return element;
     }
-    
+
     _chart._doRender = function () {
+        _chart.clean();
+        _chart.setDefaultStyling();
+
         var table = document.createElement("table");
         table.className = TABLE_CLASS;
-        $.fn.dataTable.ext.classes.sPaging += " pagination-sm";
-        _chart.clean();
+
         _parentEl.appendChild(table);
-       
+
         $(table).DataTable(_chart.getTableOptions());
 
         return _chart;
     };
+
+
+    _chart.setDefaultStyling = function () {
+        $.fn.dataTable.ext.classes.sPaging += " pagination";
+        $.fn.dataTable.ext.classes.sPageButton += " page-item";
+        $.fn.dataTable.ext.classes.sLengthSelect = "form-control form-control-sm";
+        if ($.fn.DataTable.Buttons) {
+            $.fn.DataTable.Buttons.defaults.dom.button.className = "btn btn-outline-secondary";
+        }
+    };
 
     _chart.getTableOptions = function () {
         return {
@@ -94,10 +112,12 @@ dc.tableview = function (parent, chartGroup) {
             columns: _columns,
             header: _enableHeader,
             autoWidth: _enableAutoWidth,
-            scrollY: _scrollY,
             paging: _enablePaging,
             info: _enablePagingInfo,
-			fixedHeader: _fixedHeader,
+            select: _select,
+            responsive: _responsive,
+            scroller: _enableScrolling,
+            fixedHeader: _fixedHeader,
             lengthChange: _enablePagingSizeChange,
             ordering: !!_sortBy,
             order: _chart.getOrderSettings(),
@@ -108,15 +128,21 @@ dc.tableview = function (parent, chartGroup) {
             colReorder: _enableColumnReordering,
             rowGroup: _showGroups ? { dataSrc: _groupBy } : null,
             language: {
-				info: _pagingInfoText ,
-				lengthMenu: _lengthMenuContent
-			},
+                info: _pagingInfoText ,
+                lengthMenu: _lengthMenuContent
+            },
+
+            scrollY: _scrollingOptions.scrollY,
+            scrollCollapse: _scrollingOptions.scrollCollapse,
+            deferRender: _scrollingOptions.deferRender,
+
             headerCallback: function (head, data, start, end, display) {
                 head.onclick = _listeners.headerClicked ? _listeners.headerClicked.bind(this, head, data, start, end, display) : null;
                 head.ondblclick = _listeners.headerDblClicked ? _listeners.headerDblClicked.bind(this, head, data, start, end, display) : null;
                 head.onmouseover = _listeners.headerEnter ? _listeners.headerEnter.bind(this, head, data, start, end, display) : null;
                 head.onmouseout = _listeners.headerLeave ? _listeners.headerLeave.bind(this, head, data, start, end, display) : null;
             },
+
             rowCallback: function (row, data, index) {
                 row.onclick = _listeners.rowClicked ? _listeners.rowClicked.bind(this, row, data, index) : null;
                 row.ondblclick = _listeners.rowDblClicked ? _listeners.rowDblClicked.bind(this, row, data, index) : null;
@@ -129,6 +155,9 @@ dc.tableview = function (parent, chartGroup) {
                     row.classList.add(TABLE_ROW_CLASS);
                 });
                 _parentEl.querySelector(".dataTables_paginate").classList.add(PAGINATION_CLASS);
+                _parentEl.querySelectorAll(".dataTables_wrapper .dataTables_paginate .page-item a").forEach(function(item) {
+                    item.classList.add(PAGINATION_BTN_CLASS);
+                });
             }
         };
     };
@@ -136,11 +165,11 @@ dc.tableview = function (parent, chartGroup) {
     _chart.clean = function () {
         _chart.root().selectAll("*").remove();
     };
-    
+
     _chart.getOrderSettings = function() {
         var sortingOptions = [];
         for (var i = 0; i < _sortBy.length; i++) {
-             var index = _columns.map(function (column) { return column.data || column.title || column.name; }).indexOf(_sortBy[i][0]);
+            var index = _columns.map(function (column) { return column.data || column.title || column.name; }).indexOf(_sortBy[i][0]);
             sortingOptions.push([index, _sortBy[i][1]]);
         }
         return sortingOptions;
@@ -149,7 +178,6 @@ dc.tableview = function (parent, chartGroup) {
     _chart._doRedraw = function () {
         return _chart._doRender();
     };
-
 
     /**
      * Get or set the group function for the data table. The group function takes a data row and
@@ -181,6 +209,7 @@ dc.tableview = function (parent, chartGroup) {
             return _size;
         }
         _size = size;
+
         return _chart;
     };
 
@@ -203,6 +232,7 @@ dc.tableview = function (parent, chartGroup) {
             return _beginSlice;
         }
         _beginSlice = beginSlice;
+
         return _chart;
     };
 
@@ -220,14 +250,16 @@ dc.tableview = function (parent, chartGroup) {
             return _endSlice;
         }
         _endSlice = endSlice;
+
         return _chart;
     };
-    
+
     _chart.columns = function (columns) {
         if (!arguments.length) {
             return _columns;
         }
         _columns = columns;
+
         return _chart;
     };
 
@@ -249,6 +281,7 @@ dc.tableview = function (parent, chartGroup) {
             return _sortBy;
         }
         _sortBy = sortBy;
+
         return _chart;
     };
 
@@ -270,6 +303,7 @@ dc.tableview = function (parent, chartGroup) {
             return _order;
         }
         _order = order;
+
         return _chart;
     };
 
@@ -291,15 +325,16 @@ dc.tableview = function (parent, chartGroup) {
             return _showGroups;
         }
         _showGroups = showGroups;
+
         return _chart;
     };
-
 
     _chart.groupBy = function (groupBy) {
         if (!arguments.length) {
             return _groupBy;
         }
         _groupBy = groupBy;
+
         return _chart;
     };
 
@@ -308,6 +343,7 @@ dc.tableview = function (parent, chartGroup) {
             return _enableSearch;
         }
         _enableSearch = enable;
+
         return _chart;
     };
 
@@ -316,6 +352,7 @@ dc.tableview = function (parent, chartGroup) {
             return _enablePaging;
         }
         _enablePaging = enable;
+
         return _chart;
     };
 
@@ -324,6 +361,7 @@ dc.tableview = function (parent, chartGroup) {
             return _enablePagingSizeChange;
         }
         _enablePagingSizeChange = enable;
+
         return _chart;
     };
 
@@ -332,6 +370,7 @@ dc.tableview = function (parent, chartGroup) {
             return _enablePagingInfo;
         }
         _enablePagingInfo = enable;
+
         return _chart;
     };
 
@@ -340,6 +379,7 @@ dc.tableview = function (parent, chartGroup) {
             return _enableColumnReordering;
         }
         _enableColumnReordering = enable;
+
         return _chart;
     };
 
@@ -348,6 +388,7 @@ dc.tableview = function (parent, chartGroup) {
             return _enableAutoWidth;
         }
         _enableAutoWidth = enable;
+
         return _chart;
     };
 
@@ -356,14 +397,16 @@ dc.tableview = function (parent, chartGroup) {
             return _enableHeader;
         }
         _enableHeader = enable;
+
         return _chart;
     };
 
-	_chart.fixedHeader = function (enable) {
+    _chart.fixedHeader = function (enable) {
         if (!arguments.length) {
             return _fixedHeader;
         }
         _fixedHeader = enable;
+
         return _chart;
     };
 
@@ -372,6 +415,7 @@ dc.tableview = function (parent, chartGroup) {
             return _pagingInfoText;
         }
         _pagingInfoText = text;
+
         return _chart;
     };
 
@@ -380,14 +424,7 @@ dc.tableview = function (parent, chartGroup) {
             return _rowId;
         }
         _rowId = id;
-        return _chart;
-    };
 
-    _chart.scrollY = function (scrollY) {
-        if (!arguments.length) {
-            return _scrollY;
-        }
-        _scrollY = scrollY;
         return _chart;
     };
 
@@ -396,6 +433,7 @@ dc.tableview = function (parent, chartGroup) {
             return _dataSource;
         }
         _dataSource = dataSource;
+
         return _chart;
     };
 
@@ -403,12 +441,49 @@ dc.tableview = function (parent, chartGroup) {
         if (!arguments.length) {
             return _buttons;
         }
-		var pdfButtonIndex = buttons.indexOf("pdf");
-		if (pdfButtonIndex >= 0) {
-			buttons[pdfButtonIndex] = this.__getFullWidthPdfButton();
-		}
+        var pdfButtonIndex = buttons.indexOf("pdf");
+        if (pdfButtonIndex >= 0) {
+            buttons[pdfButtonIndex] = this.__getFullWidthPdfButton();
+        }
         _buttons = buttons;
+
         return _chart;
+    };
+
+    _chart.select = function (select) {
+        if (!arguments.length) {
+            return _select;
+        }
+        _select = select;
+
+        return _chart;
+    };
+
+    _chart.responsive = function (enable) {
+        if (!arguments.length) {
+            return _responsive;
+        }
+        _responsive = enable;
+
+        return _chart;
+    };
+
+    _chart.enableScrolling = function (enable) {
+        if (!arguments.length) {
+            return _enableScrolling;
+        }
+        _enableScrolling = enable;
+
+        return _chart.redraw();
+    };
+
+    _chart.scrollingOptions = function (value) {
+        if (!arguments.length) {
+            return _scrollingOptions;
+        }
+        _scrollingOptions = value;
+
+        return _chart.redraw();
     };
 
     _chart.listeners = function (listeners) {
@@ -416,21 +491,22 @@ dc.tableview = function (parent, chartGroup) {
             return _listeners;
         }
         _listeners = listeners;
+
         return _chart;
     };
 
-	_chart.__getFullWidthPdfButton = function () {
-		return {
-			extend: "pdf",
-			customize: function (doc) {
-				doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
-			}
-		};
-	};
-	
-	_chart.getDataTable = function () {
-		return $(_parentEl.querySelector("table")).DataTable();
-	};
+    _chart.__getFullWidthPdfButton = function () {
+        return {
+            extend: "pdf",
+            customize: function (doc) {
+                doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+            }
+        };
+    };
+
+    _chart.getDataTable = function () {
+        return $(_parentEl.querySelector("table")).DataTable();
+    };
 
     return _chart.anchor(parent, chartGroup);
 };

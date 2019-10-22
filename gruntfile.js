@@ -1,4 +1,4 @@
-module.exports = function(grunt) {    
+module.exports = function(grunt) {
     this.uglifyOptions = {
 		dead_code: true,
 		conditionals: true,
@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 		loops: true,
 		if_return: true
 	};
-	
+
 	grunt.initConfig({
         cssmin: {
 			full: {
@@ -23,6 +23,9 @@ module.exports = function(grunt) {
 						"node_modules/datatables.net-fixedheader-dt/css/fixedHeader.dataTables.css",
 						"node_modules/datatables.net-colreorder-dt/css/colReorder.dataTables.css",
 						"node_modules/datatables.net-buttons-dt/css/buttons.dataTables.css",
+						"node_modules/datatables.net-scroller-dt/css/scroller.dataTables.css",
+						"node_modules/datatables.net-select-dt/css/select.dataTables.css",
+						"node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css",
 						"src/main.css"
 					]
 				}
@@ -30,11 +33,14 @@ module.exports = function(grunt) {
 			full_bs: {
 				files: {
 					"build/dc-tableview-bs.css": [
-						"node_modules/datatables.net-bs/css/dataTables.bootstrap.css",
-						"node_modules/datatables.net-rowgroup-bs/css/rowGroup.bootstrap.css",
-						"node_modules/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.css",
-						"node_modules/datatables.net-colreorder-bs/css/colReorder.bootstrap.css",
-						"node_modules/datatables.net-buttons-bs/css/buttons.bootstrap.css",
+						"node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
+						"node_modules/datatables.net-rowgroup-bs4/css/rowGroup.bootstrap4.css",
+						"node_modules/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.css",
+						"node_modules/datatables.net-colreorder-bs4/css/colReorder.bootstrap4.css",
+						"node_modules/datatables.net-buttons-bs4/css/buttons.bootstrap4.css",
+						"node_modules/datatables.net-scroller-bs4/css/scroller.bootstrap4.css",
+						"node_modules/datatables.net-select-bs4/css/select.bootstrap4.css",
+						"node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4.css",
 						"src/main.css"
 					]
 				}
@@ -45,6 +51,8 @@ module.exports = function(grunt) {
 						"node_modules/datatables.net-dt/css/jquery.dataTables.css",
 						"node_modules/datatables.net-rowgroup-dt/css/rowGroup.dataTables.css",
 						"node_modules/datatables.net-fixedheader-dt/css/fixedHeader.dataTables.css",
+						"node_modules/datatables.net-responsive-dt/responsive.dataTables.css",
+
 						"src/main.css"
 					]
 				}
@@ -52,9 +60,10 @@ module.exports = function(grunt) {
 			light_bs: {
 				files: {
 					"build/dc-tableview-light-bs.css": [
-						"node_modules/datatables.net-bs/css/dataTables.bootstrap.css",
-						"node_modules/datatables.net-rowgroup-bs/css/rowGroup.bootstrap.css",
-						"node_modules/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.css",
+						"node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css",
+						"node_modules/datatables.net-rowgroup-bs4/css/rowGroup.bootstrap4.css",
+						"node_modules/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.css",
+						"node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4.css",
 						"src/main.css"
 					]
 				}
@@ -68,6 +77,12 @@ module.exports = function(grunt) {
 					"node_modules/datatables.net-rowgroup/js/dataTables.rowGroup.js",
 					"node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js",
 					"node_modules/datatables.net-colreorder/js/dataTables.colReorder.js",
+					"node_modules/datatables.net-scroller/js/dataTables.scroller.js",
+					"node_modules/datatables.net-select/js/dataTables.select.js",
+					"node_modules/datatables.net-responsive/js/dataTables.responsive.js",
+					"node_modules/datatables.net-responsive-dt/js/responsive.dataTables.js",
+					"node_modules/datatables.net-scroller-dt/js/scroller.dataTables.js",
+					"node_modules/datatables.net-select-dt/js/select.dataTables.js",
 					"node_modules/datatables.net-buttons/js/dataTables.buttons.js",
 					"node_modules/datatables.net-buttons/js/buttons.html5.js",
 					"node_modules/datatables.net-buttons/js/buttons.print.js",
@@ -80,14 +95,23 @@ module.exports = function(grunt) {
 			},
 			full_bs: {
 				src: [
-					"node_modules/datatables.net-buttons/async/async.js",
 					"node_modules/datatables.net/js/jquery.dataTables.js",
-					"node_modules/datatables.net-bs/js/dataTables.bootstrap.js",
+					"node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js",
+					"node_modules/datatables.net-buttons/async/async.js",
 					"node_modules/datatables.net-rowgroup/js/dataTables.rowGroup.js",
+					"node_modules/datatables.net-scroller/js/dataTables.scroller.js",
+					"node_modules/datatables.net-select/js/dataTables.select.js",
+					"node_modules/datatables.net-responsive/js/dataTables.responsive.js",
+					"node_modules/datatables.net-rowgroup-bs4/js/rowGroup.bootstrap4.js",
 					"node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js",
+					"node_modules/datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4.js",
 					"node_modules/datatables.net-colreorder/js/dataTables.colReorder.js",
+					"node_modules/datatables.net-colreorder-bs4/js/colReorder.bootstrap4.js",
+					"node_modules/datatables.net-scroller-bs4/js/scroller.bootstrap4.js",
+					"node_modules/datatables.net-select-bs4/js/select.bootstrap4.js",
+					"node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
 					"node_modules/datatables.net-buttons/js/dataTables.buttons.js",
-					"node_modules/datatables.net-buttons-bs/js/buttons.bootstrap.js",
+					"node_modules/datatables.net-buttons-bs4/js/buttons.bootstrap4.js",
 					"node_modules/datatables.net-buttons/js/buttons.html5.js",
 					"node_modules/datatables.net-buttons/js/buttons.print.js",
 					"node_modules/jszip/dist/jszip.js",
@@ -102,6 +126,8 @@ module.exports = function(grunt) {
 					"node_modules/datatables.net/js/jquery.dataTables.js",
 					"node_modules/datatables.net-rowgroup/js/dataTables.rowGroup.js",
 					"node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js",
+					"node_modules/datatables.net-responsive/js/dataTables.responsive.js",
+					"node_modules/datatables.net-responsive-dt/js/responsive.dataTables.js",
 					"src/main.js"
 				],
 				dest: "build/dc-tableview-light.js"
@@ -109,7 +135,11 @@ module.exports = function(grunt) {
 			light_bs: {
 				src: [
 					"node_modules/datatables.net/js/jquery.dataTables.js",
-					"node_modules/datatables.net-bs/js/dataTables.bootstrap.js",
+					"node_modules/datatables.net-responsive/js/dataTables.responsive.js",
+					"node_modules/datatables.net-responsive-bs4/js/responsive.bootstrap4.js",
+					"node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js",
+					"node_modules/datatables.net-rowgroup-bs4/js/rowGroup.bootstrap4.js",
+					"node_modules/datatables.net-fixedheader-bs4/js/fixedHeader.bootstrap4.js",
 					"node_modules/datatables.net-rowgroup/js/dataTables.rowGroup.js",
 					"node_modules/datatables.net-fixedheader/js/dataTables.fixedHeader.js",
 					"src/main.js"
@@ -136,7 +166,7 @@ module.exports = function(grunt) {
                 options: {
                     src: "build/dc-tableview-bs.js",
                     dest: "build/dc-tableview-bs.js",
-                    globalAlias: "tableview",
+					globalAlias: "tableview",
                     deps: {
                         "default": [
 							{ "bootstrap": "bootstrap" },
@@ -203,7 +233,7 @@ module.exports = function(grunt) {
                 compress: this.uglifyOptions
             }
         },
-        
+
         _clean: {
             build: {
                 src: ["build/"]
@@ -219,9 +249,11 @@ module.exports = function(grunt) {
     grunt.renameTask("clean", "_clean");
 
     var cleanTask = ["_clean"];
-    var buildTask = ["_clean", "cssmin", "concat", "umd", "uglify"];
-    
+    var buildTask = ["_clean", "cssmin", "concat", "umd"];
+    var packageTask = ["_clean", "cssmin", "concat", "umd", "uglify"];
+
     grunt.registerTask("default", buildTask);
     grunt.registerTask("clean", cleanTask);
     grunt.registerTask("build", buildTask);
+    grunt.registerTask("package", packageTask);
 };
