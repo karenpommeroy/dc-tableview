@@ -1,2 +1,4 @@
 node_modules/
 lib/facebook.sdk.js
+
+.vscode/symbols.json
