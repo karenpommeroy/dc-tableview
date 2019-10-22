@@ -1,13 +1,14 @@
 # dc-tableview
 `dc-tableview` is an interactive chart for dc.js library that presents data in tableview form.
 It was created because I was missing some functionality in the original table that comes with dc. I designed it so that it can easily replace dc.dataTable in your projects.
-It is build on top of well known **[DataTables](https://github.com/DataTables/Dist-DataTables)** jQuery plugin
+It is build on top of well known **[DataTables](https://github.com/DataTables/Dist-DataTables)** jQuery plugin.
 
 
 ## Table of contents
 
 - [Screenshots](#screenshots)
 - [Quick start](#quick-start)
+- [Testing](#testing)
 - [Usage](#usage)
 - [Methods](#methods)
 - [Examples](#examples)
@@ -15,7 +16,7 @@ It is build on top of well known **[DataTables](https://github.com/DataTables/Di
 
 ## Screenshots
 
-![Bootstrap styled version](https://rawgit.com/karenpommeroy/dc-tableview/master/assets/screen_1.png)
+![Bootstrap 4 styled version](https://rawgit.com/karenpommeroy/dc-tableview/master/assets/screen_1.png)
 
 ## Quick start
 Several quick start options are available:
@@ -35,9 +36,9 @@ Several quick start options are available:
  * **[dc-tableview-light-bs.min.js](https://raw.githubusercontent.com/karenpommeroy/dc-tableview/master/build/dc-tableview-light.min.js)**
 
 
-##### Install from Bower
+##### Install from Yarn
 ```bash
-bower install dc-tableview --save
+yarn install dc-tableview --save
 ```
 
 ##### Install from Npm
@@ -55,8 +56,22 @@ To clone the repository, use
 ```bash
 grunt build
 ```
+or to create production ready, minified versions:
+```bash
+grunt package
+```
 
 Done!
+
+## Testing
+Some basic integrity tests are implemented using jest.
+```bash
+npm test
+```
+```bash
+npm run test-debug #(verbose mode with in-browser source debugging)
+```
+Test results are printed to terminal by default but you can modify jest.config.js file to change that
 
 ## Usage
 
@@ -182,10 +197,38 @@ Get status or enable/disable paging size change combo box.
 chart.enablePagingSizeChange(true);
 ```
 
+##### bool enableScrolling(bool enable)
+Get status or enable/disable scrolling (instead of paging).
+```javascript
+chart.enableScrolling(true);
+```
+
+##### object scrollingOptions(object options)
+Get or set scrolling options.
+```javascript
+chart.scrollingOptions({
+    scrollY: string | number,
+    scrollCollapse: boolean,
+    deferRender: boolean
+});
+```
+
 ##### bool enableSearch(bool enable)
 Get status or enable/disable search (filter) input.
 ```javascript
 chart.enableSearch(true);
+```
+
+##### bool responsive(bool enable)
+Get status or enable/disable responsive features.
+```javascript
+chart.responsive(true);
+```
+
+##### bool responsive(bool enable)
+Get status or enable/disable responsive features.
+```javascript
+chart.responsive(true);
 ```
 
 ##### void endSlice(int slice)
@@ -228,7 +271,6 @@ chart.listeners({
     }
 });
 ```
-
 ##### void order(string appId)
 Gets or sets default sort type used in the chart. This will be used if order is not specified using **sortBy()** function.
 ```javascript
@@ -246,12 +288,6 @@ chart.pagingInfoText("Showing _START_ - _END_ of _TOTAL_ items");
 Get or set the name of the column that will be used as row id
 ```javascript
 chart.rowId(id");
-```
-
-##### string scrollY(string size)
-Get or set the value for height at which scroll should be visible.
-```javascript
-chart.scrollY("250px");
 ```
 
 ##### void showGroups (bool show)
@@ -289,7 +325,7 @@ chart.enableHeader(false)
 Click one of the links below to see dc-tableview in action:
 
 * [Customized table with default styling](https://rawgit.com/karenpommeroy/dc-tableview/master/examples/custom-table-default.html)
-* [Table styled with bootstrap working with other charts](https://rawgit.com/karenpommeroy/dc-tableview/master/examples/custom-table-bootstrap.html)
+* [Table styled with Bootstrap 4 working with other charts](https://rawgit.com/karenpommeroy/dc-tableview/master/examples/custom-table-bootstrap.html)
 
 All of above examples are available in the examples folder located in the repository.
 
