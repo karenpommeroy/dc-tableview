@@ -39,52 +39,6 @@ table.dataTable {
 	margin-right: 1rem;
 }
 
-div.dataTables_paginate a.paginate_button.first,
-div.dataTables_paginate a.paginate_button.previous {
-	position: relative;
-	padding-left: 24px;
-}
-
-div.dataTables_paginate a.paginate_button.next,
-div.dataTables_paginate a.paginate_button.last {
-	position: relative;
-	padding-right: 24px;
-}
-
-div.dataTables_paginate a.first:before,
-div.dataTables_paginate a.previous:before {
-	position: absolute;
-	top: 8px;
-	left: 10px;
-	display: block;
-	font-family: FontAwesome;
-}
-
-div.dataTables_paginate a.next:after,
-div.dataTables_paginate a.last:after {
-	position: absolute;
-	top: 8px;
-	right: 10px;
-	display: block;
-	font-family: FontAwesome;
-}
-
-div.dataTables_paginate a.first:before {
-	content: "\f100";
-}
-
-div.dataTables_paginate a.previous:before {
-	content: "\f104";
-}
-
-div.dataTables_paginate a.next:after {
-	content: "\f105";
-}
-
-div.dataTables_paginate a.last:after {
-	content: "\f101";
-}
-
 div.dataTables_paginate li.first > a,
 div.dataTables_paginate li.previous > a {
 	position: relative;
@@ -100,35 +54,33 @@ div.dataTables_paginate li.last > a {
 div.dataTables_paginate li.first a:before,
 div.dataTables_paginate li.previous a:before {
 	position: absolute;
-	top: 6px;
 	left: 10px;
-	display: block;
+	display: inline;
 	font-family: FontAwesome;
 }
 
 div.dataTables_paginate li.next a:after,
 div.dataTables_paginate li.last a:after {
 	position: absolute;
-	top: 6px;
 	right: 10px;
-	display: block;
+	display: inline;
 	font-family: FontAwesome;
 }
 
 div.dataTables_paginate li.first a:before {
-	content: "\f100";
+	content: "\2329\2329";
 }
 
 div.dataTables_paginate li.previous a:before {
-	content: "\f104";
+	content: "\2329";
 }
 
 div.dataTables_paginate li.next a:after {
-	content: "\f105";
+	content: "\232a";
 }
 
 div.dataTables_paginate li.last a:after {
-	content: "\f101";
+	content: "\232a\232a";
 }
 
 div.columns div.dataTables_paginate li.first a:before,
