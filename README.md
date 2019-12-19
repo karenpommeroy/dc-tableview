@@ -54,11 +54,11 @@ To clone the repository, use
 
 ##### Build sources
 ```bash
-grunt build
+npm build (or yarn build)
 ```
 or to create production ready, minified versions:
 ```bash
-grunt package
+npm package (or yarn package)
 ```
 
 Done!
